@@ -35,6 +35,8 @@
 \definecolor{noteframe}{RGB}{180,120,0}
 \definecolor{exbg}{RGB}{235,248,235}
 \definecolor{exframe}{RGB}{0,120,60}
+\definecolor{answerbg}{RGB}{235,248,248}
+\definecolor{answerframe}{RGB}{0,100,100}
 
 % -----------------------------------------------------------------------
 % Section formatting
@@ -63,6 +65,33 @@
   innertopmargin=6pt, innerbottommargin=6pt, innerleftmargin=10pt, innerrightmargin=10pt,
   skipabove=8pt, skipbelow=8pt
 ]{exbox}
+
+% -----------------------------------------------------------------------
+% Callout boxes
+% -----------------------------------------------------------------------
+\newmdenv[
+  backgroundcolor=boxbg, linecolor=boxframe, linewidth=1.5pt, roundcorner=4pt,
+  innertopmargin=8pt, innerbottommargin=8pt, innerleftmargin=12pt, innerrightmargin=12pt,
+  skipabove=10pt, skipbelow=10pt
+]{youwillbox}
+
+\newmdenv[
+  backgroundcolor=exbg, linecolor=exframe, linewidth=1.2pt, roundcorner=4pt,
+  innertopmargin=6pt, innerbottommargin=6pt, innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=8pt, skipbelow=8pt
+]{questionsbox}
+
+\newmdenv[
+  backgroundcolor=notebg, linecolor=noteframe, linewidth=1.2pt, roundcorner=4pt,
+  innertopmargin=6pt, innerbottommargin=6pt, innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=8pt, skipbelow=8pt
+]{hintsbox}
+
+\newmdenv[
+  backgroundcolor=answerbg, linecolor=answerframe, linewidth=1.2pt, roundcorner=4pt,
+  innertopmargin=6pt, innerbottommargin=6pt, innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=8pt, skipbelow=8pt
+]{answersbox}
 
 % -----------------------------------------------------------------------
 % Header / footer
