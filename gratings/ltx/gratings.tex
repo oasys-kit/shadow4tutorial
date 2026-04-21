@@ -175,7 +175,7 @@ function} $F$ for a toroidal grating, expanded in terms of the sagittal coordina
 (across the groove direction) and the meridional coordinate $h$ (along the grooves):
 
 \begin{equation}
-  F = F_{00} + F_{01}\,w
+  F = F_{00} + F_{10}\,w
     + \tfrac{1}{2}F_{20}\,w^2
     + \tfrac{1}{2}F_{02}\,h^2
     + \tfrac{1}{2}F_{30}\,w^3
@@ -188,7 +188,7 @@ function} $F$ for a toroidal grating, expanded in terms of the sagittal coordina
 respect to variations in the ray coordinates.  Setting each aberration coefficient to zero
 yields the design conditions for a perfect (aberration-free) monochromator.
 
-The value of these coefficients are:
+The values of these coefficients are:
 
 \begin{eqnarray}
 \frac{1}{d} = k = \frac{\partial n}{\partial w} &=& \frac{1 + 2b_2 w + 3b_3 w^2 + \ldots}{d_0} \\[10pt]
@@ -198,7 +198,7 @@ F_{20} &=& \frac{1}{2}\left(\frac{\cos^2\alpha}{r} - \frac{\cos\alpha}{R} + \fra
 F_{02} &=& \frac{1}{r} - \frac{\cos\alpha}{\rho} + \frac{1}{r'} - \frac{\cos\beta}{\rho} \\[10pt]
 F_{12} &=&  \frac{1}{2}\left(\frac{\sin\alpha}{r}\left(\frac{1}{r} - \frac{\cos\alpha}{\rho}\right) + \frac{\sin\beta}{r'}\left(\frac{1}{r'} - \frac{\cos\beta}{\rho}\right)\right)
 \\[10pt]
-F_{30} &=& \frac{1}{2}\left(\frac{\sin\alpha}{r}\left(\frac{\cos^2\alpha}{r} - \frac{\cos\alpha}{R}\right) + (\beta r')\right) - \frac{m\lambda\, b_3}{d_0}
+F_{30} &=& \frac{1}{2}\left(\frac{\sin\alpha}{r}\left(\frac{\cos^2\alpha}{r} - \frac{\cos\alpha}{R}\right) + \frac{\sin\beta}{r'}\left(\frac{\cos^2\beta}{r'} - \frac{\cos\beta}{R}\right)\right) - \frac{m\lambda\, b_3}{d_0}
 \end{eqnarray}
 
 
@@ -211,12 +211,12 @@ Note that for a grating with constant ruling $b_2=b_3=0$.
 %   $R$ (meridional) and $\rho$ (sagittal).}
 
 \begin{figure}[H]
-\label{fig:schematic}
 \caption{
   Geometry of a toroidal grating showing source point $S$, grating vertex, image
   point $S'$, sagittal coordinate $h$, meridional coordinate $w$,
   angles of incidence $\alpha$ and diffraction $\beta$, and radii of curvature
   $R$ (meridional) and $\rho$ (sagittal).}
+\label{fig:schematic}
   \begin{center}
   \includegraphics[width=0.69\textwidth]{figures/schematic.png}   
   \end{center}
@@ -269,7 +269,7 @@ The grating equation in diffraction order $m$ is:
   \label{eq:grating}
 \end{equation}
 where $d$ is the groove spacing, $\al$ is the angle of incidence,
-and $\be$ is the diffraction angle. Positivs angles are counterclockwise (CCW). In SHADOW notation
+and $\be$ is the diffraction angle. Positive angles are counterclockwise (CCW). In SHADOW notation
 $m = -1$  corresponds to the first order ``internal reflection'' ($|\be| > |\al|$).
 
 The theoretical resolving power is determined by the exit-slit-limited resolution:
@@ -381,11 +381,11 @@ For larger openings ($\gtrsim 50\,\mu$m) the resolution is
 %   regimes with the transition near $20\,\mu$m.}
 
 \begin{figure}[H]
-\label{fig:schematic}
 \caption{
   SHADOW ray-tracing results for SGM at 1000\,eV, including spot dimensions at the exit slit plane,
   energy resolution histogram, and energy resolution vs.\ slit opening, showing source-limited and slit-limited
   regimes with the transition near $20-50\,\mu$m.}
+\label{fig:SGM1000}
   \begin{center}
   \includegraphics[width=0.99\textwidth]{figures/SGM1000.png}   
   \end{center}
@@ -496,11 +496,11 @@ $87.8^\circ$ incidence.
 %   the toroid to the resolution budget.}
 
 \begin{figure}[H]
-\label{fig:PGM}
 \caption{
   Effect of slope errors on the toroidal mirror in the vertical PGM.
-  The image on the slit plane with with realistic r.m.s. slope errors is  $\sim 18.4\,\mu$m (ideal, no slope errors: $\sim 5.8\,\mu$m).
+  The image on the slit plane with realistic r.m.s. slope errors is  $\sim 18.4\,\mu$m (ideal, no slope errors: $\sim 5.8\,\mu$m).
   This demonstrates the degradation of the resolution due to the slope errors that affect the collimation in the diffraction plane.}
+\label{fig:PGM}
   \begin{center}
   \includegraphics[width=0.99\textwidth]{figures/PGMslope.png}   
   \end{center}
@@ -509,7 +509,7 @@ $87.8^\circ$ incidence.
 
 \subsection{Follath Collimated PGM: Horizontal Deflection}
 
-The \textbf{Follath PGM} (R.\ Follath and F.\ Senf, NIM A\,390, 388, 1997) uses the toroidal mirror, such as the 
+The \textbf{Follath PGM} (R.\ Follath and F.\ Senf, NIM A\,390, 388, 1997) uses the toroidal mirror, such that the 
 \textbf{horizontal} sagittal focusing is in the grating vertical (diffraction) plane. The key advantage is
 that, in the sagittal plane, slope errors on the toroidal mirror are much less critical
 because the sagittal focusing is less sensitive to meridional slope errors. This is expressed by the forgiveness factor\footnote{In the meridional plane, the slope errors $\sigma$ 
@@ -546,8 +546,8 @@ optics.  With slope errors, the image quality degrades further.
 \end{exbox}
 
 \begin{figure}[H]
-\label{fig:Follath}
 \caption{ Left: Follath horizontal PGM ($c = 2$, 1000\,eV). Observe: no coma, practically no effect of slope error. Right:  Follath horizontal PGM ($c = 5$, 1000\,eV). Observe: Astigmatic coma (term $F_{12}$), small effect of slope error. }
+\label{fig:Follath}
   \begin{center}
   \includegraphics[width=0.49\textwidth]{figures/follathc2.png}
   \includegraphics[width=0.49\textwidth]{figures/follathc5.png} 
@@ -697,12 +697,12 @@ trade-off), but at the cost of reduced heat-load tolerance.
 \end{notebox}
 
 \begin{figure}[H]
-\label{fig:VLS}
 \caption{
   FVLS-PGM ray-tracing at the exit slit under three conditions:
   (a)~no heat load (reference); (b)~with heat load, uncorrected (defocused, RP degraded);
   (c)~with heat load, corrected by angular adjustment
   ($\Delta\alpha = +0.00946°$, $\Delta\beta = +0.00471°$) --- full RP recovery.}
+\label{fig:VLS}
   \begin{center}
   \includegraphics[width=0.99\textwidth]{figures/VLS.png}   
   \end{center}
