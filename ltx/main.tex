@@ -1,57 +1,102 @@
-%% Overleaf			
-%% Software Manual and Technical Document Template	
-%% 									
-%% This provides an example of a software manual created in Overleaf.
+\documentclass[12pt,a4paper]{article}
 
-\documentclass{ol-softwaremanual}
-
-
-
-% Packages used in this example
-\usepackage{graphicx}  % for including images
-\usepackage{microtype} % for typographical enhancements
-\usepackage{minted}    % for code listings
-\usepackage{amsmath}   % for equations and mathematics
-\setminted{style=friendly,fontsize=\small}
-\renewcommand{\listoflistingscaption}{List of Code Listings}
-\usepackage{hyperref}  % for hyperlinks
-\usepackage[a4paper,top=4.2cm,bottom=4.2cm,left=3.5cm,right=3.5cm]{geometry} % for setting page size and margins
-\usepackage{booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
 \usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
 \usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{minted}
 
-% Key result box
+\geometry{margin=2.5cm}
+
+\setminted{style=friendly,fontsize=\small}
+
+% -----------------------------------------------------------------------
+% Colors
+% -----------------------------------------------------------------------
+\definecolor{sectioncolor}{RGB}{30,60,140}
 \definecolor{boxbg}{RGB}{240,245,255}
 \definecolor{boxframe}{RGB}{30,60,140}
+\definecolor{notebg}{RGB}{255,248,230}
+\definecolor{noteframe}{RGB}{180,120,0}
+\definecolor{exbg}{RGB}{235,248,235}
+\definecolor{exframe}{RGB}{0,120,60}
+
+% -----------------------------------------------------------------------
+% Section formatting
+% -----------------------------------------------------------------------
+\titleformat{\section}{\large\bfseries\color{sectioncolor}}{{\thesection.}}{0.5em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{sectioncolor}}{{\thesubsection.}}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\itshape\color{sectioncolor}}{}{0em}{}
+
+% -----------------------------------------------------------------------
+% Callout boxes
+% -----------------------------------------------------------------------
 \newmdenv[
-  backgroundcolor=boxbg,
-  linecolor=boxframe,
-  linewidth=1.5pt,
-  roundcorner=4pt,
-  innertopmargin=8pt,
-  innerbottommargin=8pt,
-  innerleftmargin=12pt,
-  innerrightmargin=12pt,
-  skipabove=10pt,
-  skipbelow=10pt
+  backgroundcolor=boxbg, linecolor=boxframe, linewidth=1.5pt, roundcorner=4pt,
+  innertopmargin=8pt, innerbottommargin=8pt, innerleftmargin=12pt, innerrightmargin=12pt,
+  skipabove=10pt, skipbelow=10pt
 ]{keyresult}
 
-% Custom macros used in this example document
+\newmdenv[
+  backgroundcolor=notebg, linecolor=noteframe, linewidth=1.2pt, roundcorner=4pt,
+  innertopmargin=6pt, innerbottommargin=6pt, innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=8pt, skipbelow=8pt
+]{notebox}
+
+\newmdenv[
+  backgroundcolor=exbg, linecolor=exframe, linewidth=1.2pt, roundcorner=4pt,
+  innertopmargin=6pt, innerbottommargin=6pt, innerleftmargin=10pt, innerrightmargin=10pt,
+  skipabove=8pt, skipbelow=8pt
+]{exbox}
+
+% -----------------------------------------------------------------------
+% Header / footer
+% -----------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small Tutorials on Ray Tracing for X-ray Optics with SHADOW4}
+\lhead{\small\itshape M.\ Sanchez del Rio}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% -----------------------------------------------------------------------
+% Custom macros
+% -----------------------------------------------------------------------
 \newcommand{\doclink}[2]{\href{#1}{#2}\footnote{\url{#1}}}
 \newcommand{\cs}[1]{\texttt{\textbackslash #1}}
 
-% Frontmatter data; appears on title page
-\title{Tutorials on ray tracing simulations for X-ray optics with SHADOW4}
-% \version{0.0.1}
-\author{M. Sanchez del Rio}
-% \softwarelogo{\includegraphics[width=8cm]{logo}}
-
+% =======================================================================
 \begin{document}
+% =======================================================================
 
-\maketitle
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\huge\bfseries Tutorials on Ray Tracing Simulations\\[0.4em]
+   for X-ray Optics with SHADOW4}\\[1.5em]
+  {\large\itshape From Sources to Complete Beamlines}\\[2em]
+  {\normalsize M.\ Sanchez del Rio\\[0.5em]
+   ESRF -- The European Synchrotron, Grenoble, France}\\[4em]
+  {\normalsize\today}
+  \vfill
+\end{titlepage}
 
 \tableofcontents
-% \listoflistings
 
 \newpage
 \section{Introduction to SHADOW4}
@@ -62,7 +107,6 @@
 \section{Learning reference frames in SHADOW using a geometrical source}
 \input{reference-frames/intro.tex}
 \input{reference-frames/main.tex}
-
 
 \newpage
 \section{Synchrotron sources: Bending magnets}
@@ -83,7 +127,6 @@
 \section{Beam propagation (ellipses in phase space)}
 \input{beam-propagation/intro.tex}
 \input{beam-propagation/main.tex}
-
 
 \newpage
 \section{Focusing with grazing incidence mirrors: effect of aberrations}
@@ -120,19 +163,11 @@
 \input{refractors/intro.tex}
 \input{refractors/main.tex}
 
-
 \newpage
 \section{Simulation of a complete beamline}
 \input{complete-beamline/main.tex}
-
-
-% \appendix
 
 \bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}
-
-
-
-
