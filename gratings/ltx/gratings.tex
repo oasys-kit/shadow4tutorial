@@ -104,7 +104,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\small Soft X-Ray Grating Monochromators: Theory and Simulation}
-\lhead{\small\itshape After Reininger (2016, 2025)}
+\lhead{\small\itshape Reininger \& Sanchez del Rio}
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 
@@ -131,7 +131,8 @@
    \textit{Software for Optical Simulations Workshop},\\
    Trieste, October 2016;\\
    adapted by M.\ Sanchez del Rio,\\
-   DESY Hamburg, May 2025}\\[4em]
+   DESY Hamburg, May 2025\\
+   ESRF Grenoble, May 2026}\\[4em]
   {\normalsize\today}
   \vfill
 \end{titlepage}
@@ -158,10 +159,10 @@ All simulations use the OASYS/SHADOW ray-tracing environment.  Unless otherwise 
 the source parameters correspond to the (then) present APS undulator: a 2\,m in-vacuum
 device with realistic emittance, divergence, and energy spread.
 
-\placeholder{4cm}{Fig.~1}{%
-  Overview schematic of the four monochromator types covered in this document
-  (SGM, vertical PGM, Follath PGM, FVLS-PGM), showing their relative complexity
-  and key optical components.}
+% \placeholder{4cm}{Fig.~1}{%
+%   Overview schematic of the four monochromator types covered in this document
+%   (SGM, vertical PGM, Follath PGM, FVLS-PGM), showing their relative complexity
+%   and key optical components.}
 
 % =======================================================================
 \section{Theoretical Foundation: Optical Path Length and Fermat's Principle}
@@ -171,14 +172,14 @@ device with realistic emittance, divergence, and energy spread.
 
 The foundation for all grating monochromator designs is the \textbf{optical path length
 function} $F$ for a toroidal grating, expanded in terms of the sagittal coordinate $w$
-(across the groove direction) and the meridional coordinate $\ell$ (along the grooves):
+(across the groove direction) and the meridional coordinate $h$ (along the grooves):
 
 \begin{equation}
   F = F_{00} + F_{01}\,w
     + \tfrac{1}{2}F_{20}\,w^2
-    + \tfrac{1}{2}F_{02}\,\ell^2
+    + \tfrac{1}{2}F_{02}\,h^2
     + \tfrac{1}{2}F_{30}\,w^3
-    + \tfrac{1}{2}F_{21}\,w\,\ell^2
+    + \tfrac{1}{2}F_{21}\,w\,h^2
     + \cdots
   \label{eq:OPL}
 \end{equation}
@@ -187,11 +188,40 @@ function} $F$ for a toroidal grating, expanded in terms of the sagittal coordina
 respect to variations in the ray coordinates.  Setting each aberration coefficient to zero
 yields the design conditions for a perfect (aberration-free) monochromator.
 
-\placeholder{5cm}{Fig.~2}{%
+The value of these coefficients are:
+
+\begin{eqnarray}
+\frac{1}{d} = k = \frac{\partial n}{\partial w} &=& \frac{1 + 2b_2 w + 3b_3 w^2 + \ldots}{d_0} \\[10pt]
+F_{00} &=& r + r' \\[10pt]
+F_{10} &=& m\frac{\lambda}{d_0} - (\sin\alpha + \sin\beta) \\[10pt]
+F_{20} &=& \frac{1}{2}\left(\frac{\cos^2\alpha}{r} - \frac{\cos\alpha}{R} + \frac{\cos^2\beta}{r'} - \frac{\cos\beta}{R}\right) - \frac{m\lambda\, b_2}{d_0} \\[10pt]
+F_{02} &=& \frac{1}{r} - \frac{\cos\alpha}{\rho} + \frac{1}{r'} - \frac{\cos\beta}{\rho} \\[10pt]
+F_{12} &=&  \frac{1}{2}\left(\frac{\sin\alpha}{r}\left(\frac{1}{r} - \frac{\cos\alpha}{\rho}\right) + \frac{\sin\beta}{r'}\left(\frac{1}{r'} - \frac{\cos\beta}{\rho}\right)\right)
+\\[10pt]
+F_{30} &=& \frac{1}{2}\left(\frac{\sin\alpha}{r}\left(\frac{\cos^2\alpha}{r} - \frac{\cos\alpha}{R}\right) + (\beta r')\right) - \frac{m\lambda\, b_3}{d_0}
+\end{eqnarray}
+
+
+Note that for a grating with constant ruling $b_2=b_3=0$.
+
+% \placeholder{5cm}{Fig.~2}{%
+%   Geometry of a toroidal grating showing source point $S$, grating vertex, image
+%   point $S'$, sagittal coordinate $w$, meridional coordinate $\ell$,
+%   angles of incidence $\alpha$ and diffraction $\beta$, and radii of curvature
+%   $R$ (meridional) and $\rho$ (sagittal).}
+
+\begin{figure}[H]
+\label{fig:schematic}
+\caption{
   Geometry of a toroidal grating showing source point $S$, grating vertex, image
-  point $S'$, sagittal coordinate $w$, meridional coordinate $\ell$,
+  point $S'$, sagittal coordinate $h$, meridional coordinate $w$,
   angles of incidence $\alpha$ and diffraction $\beta$, and radii of curvature
   $R$ (meridional) and $\rho$ (sagittal).}
+  \begin{center}
+  \includegraphics[width=0.69\textwidth]{figures/schematic.png}   
+  \end{center}
+\end{figure}
+
 
 \subsection{Meaning of the Coefficients}
 
@@ -203,19 +233,33 @@ yields the design conditions for a perfect (aberration-free) monochromator.
 \midrule
 $F_{00}$ & Central path length    & Constant (irrelevant for focusing) \\
 $F_{01}$ & Grating equation term  & Selects wavelength; always present \\
-$F_{20}$ & Defocus (meridional)   & Shifts focus along optical axis \\
-$F_{02}$ & Defocus (sagittal)     & Sagittal focus mismatch \\
-$F_{30}$ & Primary coma           & Asymmetric blur at exit slit \\
-$F_{21}$ & Mixed (coma--sagittal) & Couples sagittal and meridional aberrations \\
+$F_{20}$ & Meridional Focus   & Shifts focus along optical axis \\
+$F_{02}$ & Sagittal Focus     & Sagittal focus mismatch \\
+$F_{30}$ & Primary coma           & Asymmetric blur focal plane \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 In practice, the key design goals are:
-\begin{itemize}
-  \item $F_{20} = 0$: meridional focus at the exit slit position.
-  \item $F_{30} = 0$: coma-free operation (often achievable at one energy only).
-\end{itemize}
+
+$F_{20} = 0$: meridional focus at the exit slit position:
+\begin{equation}
+    \frac{\cos^2\alpha}{r} + \frac{\cos^2\beta}{r'} = \frac{\cos\alpha + \cos\beta}{R} + \frac{2m\lambda\, b_2}{d_0}
+\end{equation}
+
+$F_{02} = 0$: Sagittal focus at the exit slit position:
+
+\begin{equation}
+\frac{1}{r} + \frac{1}{r'} = \frac{\cos\alpha + \cos\beta}{\rho}
+\end{equation}
+
+$F_{30} = 0$: No Primary Coma:
+
+\begin{equation}
+    \frac{\sin\alpha}{r}\left(\frac{\cos^2\alpha}{r} - \frac{\cos\alpha}{R}\right) + \frac{\sin\beta}{r'}\left(\frac{\cos^2\beta}{r'} - \frac{\cos\beta}{R}\right) - \frac{2m\lambda\, b_3}{d_0} = 0
+\end{equation}
+
+Note that for the constant ruling grating $b_3=0$. On the ``Rowland circle" ($r = R \cos\alpha$, $r' = R \cos\beta)$, both terms vanish individually, so coma is automatically zero (a good key property of the Rowland circle mounting).
 
 \subsection{Grating Equation and Resolving Power}
 
@@ -224,9 +268,9 @@ The grating equation in diffraction order $m$ is:
   m\la = d\,(\sin\al - \sin\be),
   \label{eq:grating}
 \end{equation}
-where $d$ is the groove spacing, $\al$ is the angle of incidence (positive above normal),
-and $\be$ is the diffraction angle (negative in the SGM convention used here, where
-$m = -1$ in SHADOW notation corresponds to the physically relevant first order).
+where $d$ is the groove spacing, $\al$ is the angle of incidence,
+and $\be$ is the diffraction angle. Positivs angles are counterclockwise (CCW). In SHADOW notation
+$m = -1$  corresponds to the first order ``internal reflection'' ($|\be| > |\al|$).
 
 The theoretical resolving power is determined by the exit-slit-limited resolution:
 \begin{keyresult}
@@ -259,10 +303,10 @@ source-to-grating and grating-to-image distances.  Agreement between the ray-tra
 result and Eqs.~\eqref{eq:sanity_z}--\eqref{eq:sanity_x} confirms that the optical system
 is properly focused.
 
-\placeholder{3.5cm}{Fig.~3}{%
-  Diagram illustrating the demagnification geometry: source of size $\sigma_z$
-  at distance $r$, grating with angles $\alpha$ and $\beta$, and image of size
-  $\Delta_z$ at distance $r'$, showing the $(\cos\alpha/\cos\beta)$ asymmetry factor.}
+% \placeholder{3.5cm}{Fig.~3}{%
+%   Diagram illustrating the demagnification geometry: source of size $\sigma_z$
+%   at distance $r$, grating with angles $\alpha$ and $\beta$, and image of size
+%   $\Delta_z$ at distance $r'$, showing the $(\cos\alpha/\cos\beta)$ asymmetry factor.}
 
 % =======================================================================
 \section{Spherical Grating Monochromator (SGM)}
@@ -291,10 +335,10 @@ where $R$ is the grating radius of curvature.  At each energy, $\al$ and $\be$ c
 (coupled through Eq.~\eqref{eq:grating}), so the focal distance $r'$ also changes.
 Therefore, \textbf{the SGM requires a movable exit slit} to track the focus.
 
-\placeholder{4.5cm}{Fig.~4}{%
-  SGM optical layout: source at distance $r$, single spherical grating (radius $R$),
-  and movable exit slit at distance $r'(E)$.  Indicate the angles $\alpha$ and $\beta$,
-  and the energy-dependent slit travel range.}
+% \placeholder{4.5cm}{Fig.~4}{%
+%   SGM optical layout: source at distance $r$, single spherical grating (radius $R$),
+%   and movable exit slit at distance $r'(E)$.  Indicate the angles $\alpha$ and $\beta$,
+%   and the energy-dependent slit travel range.}
 
 \begin{notebox}
 \textbf{SGM design rule:} Because $r'(E)$ is energy-dependent, a fixed exit slit position
@@ -306,44 +350,60 @@ resolution.  The exit slit must be translated to follow the focus.
 
 \begin{exbox}
 \textbf{File:} \texttt{01\_SGM\_1000eV.ows}\\[4pt]
-\textbf{Parameters:} $r = 30$\,m, $r' \approx 9.9$\,m, $\al = 87.3°$, $\be = 89.1°$,
+\textbf{Parameters:} $r = 30$\,m, $r' \approx 9.9$\,m, $\al = 87.3^\circ$, $\be = 89.1^\circ$, $R =636$\,m, $\rho =9.9$\,m,
 diffraction order $m = -1$.
 
 \medskip
 \textbf{Results:}
 \begin{itemize}
-  \item Predicted vertical image size (sanity check):
-        $\Delta_z = 2.35\,\sigma_z\,(\cos\al/\cos\be)\,(r'/r) \approx 36\,\mu$m.
-  \item Predicted horizontal image size: $\Delta_x \approx 217\,\mu$m.
+  \item Predicted vertical and horizontal image sizes (sanity check):
+
+  
+  $\Delta_z = 2.35\,\sigma_z\,(\cos\al/\cos\be)\,(r'/r) \approx 36\,\mu$m.
+  
+  $\Delta_x \approx 217\,\mu$m (at the position of sagittal focus!).
   \item Achieved resolving power: $\RP \approx 18\,000$ at 1000\,eV with 55\,meV FWHM
         energy resolution.
-  \item Ray-tracing confirms both sanity check values, validating the optical layout.
+  \item Ray-tracing gives $\Delta_z = 35~\mu$m, $\Delta_x = 2030~\mu$m.
 \end{itemize}
 
 \medskip
-\textbf{Slit scan:} Resolution is \emph{source limited} for slit openings
-$\lesssim 20\,\mu$m; for larger openings ($\gtrsim 50\,\mu$m) the resolution is
+\textbf{Slit scan:} Using source in the photon energy interval 999.8 $< E < $ 1000.2~eV, the resolution is obtained from the FWHM of the intensity-energy histogram. Using a slit of 3$\mu$m, the resulting $\Delta E=$0.552~eV (RP = 18116).  It is verified that roughly constant resolution is obtained slit openings
+$\lesssim 20\,\mu$m (\emph{source limited}).
+For larger openings ($\gtrsim 50\,\mu$m) the resolution is
 \emph{slit limited}, degrading linearly with slit width.
 \end{exbox}
 
-\placeholder{5cm}{Fig.~5}{%
-  SHADOW ray-tracing results for SGM at 1000\,eV.  Left: footprint and spot diagram at
-  the exit slit plane ($\Delta_z \approx 36\,\mu$m, $\Delta_x \approx 217\,\mu$m).
-  Right: resolving power vs.\ slit opening, showing source-limited and slit-limited
-  regimes with the transition near $20\,\mu$m.}
+% \placeholder{5cm}{Fig.~5}{%
+%   SHADOW ray-tracing results for SGM at 1000\,eV.  Left: footprint and spot diagram at
+%   the exit slit plane ($\Delta_z \approx 36\,\mu$m, $\Delta_x \approx 217\,\mu$m).
+%   Right: resolving power vs.\ slit opening, showing source-limited and slit-limited
+%   regimes with the transition near $20\,\mu$m.}
+
+\begin{figure}[H]
+\label{fig:schematic}
+\caption{
+  SHADOW ray-tracing results for SGM at 1000\,eV, including spot dimensions at the exit slit plane,
+  energy resolution histogram, and energy resolution vs.\ slit opening, showing source-limited and slit-limited
+  regimes with the transition near $20-50\,\mu$m.}
+  \begin{center}
+  \includegraphics[width=0.99\textwidth]{figures/SGM1000.png}   
+  \end{center}
+\end{figure}
+
 
 \subsection{Ray-Tracing Example at 1600\,eV}
 
 \begin{exbox}
 \textbf{File:} \texttt{02\_SGM\_1600eV.ows}\\[4pt]
-\textbf{Parameters:} $\al = 87.63°$, $\be = -88.77°$.  Source: $S_x = 280\,\mu$m,
-$S_z = 154\,\mu$m, $S_x' = 18\,\mu$rad, $S_z' = 14\,\mu$rad.
+\textbf{Parameters:} $\al = 87.63^\circ$, $\be = -88.77^\circ$.  Source: $\Sigma_x = 280\,\mu$m,
+$\Sigma_z = 13.7\,\mu$m, $\Sigma_x' = 18.4\,\mu$rad, $\Sigma_z' = 14.2\,\mu$rad.
 
 \medskip
 \textbf{Key finding --- focus shift with energy:}\\
 The sanity-check formula predicts $\Delta_z \approx 20\,\mu$m at the nominal slit
 position, but the ray-tracing footprint shows the beam is \emph{not at focus} at 1600\,eV
-if the exit slit remains at the 1000\,eV position.  Moving the exit slit to
+if the exit slit remains at the 1000\,eV position (the vertical size is 55.6\,$\mu$m FWHM).  Moving the exit slit to
 $r' = 11\,046$\,mm (satisfying $F_{20}(1600\,\mathrm{eV}) = 0$) restores focus and
 gives $\Delta_z \approx 22\,\mu$m, consistent with the sanity check.
 
@@ -352,11 +412,11 @@ gives $\Delta_z \approx 22\,\mu$m, consistent with the sanity check.
 energy.  The exit slit movement \emph{corrects defocus but does not correct coma}.
 \end{exbox}
 
-\placeholder{5cm}{Fig.~6}{%
-  SGM at 1600\,eV: comparison of slit-plane footprints (a)~at the fixed 1000\,eV slit
-  position (defocused, asymmetric) and (b)~after slit translation to $r' = 11\,046$\,mm
-  (in focus, $\Delta_z \approx 22\,\mu$m).  The residual coma asymmetry remains in
-  both cases.}
+% \placeholder{5cm}{Fig.~6}{%
+%   SGM at 1600\,eV: comparison of slit-plane footprints (a)~at the fixed 1000\,eV slit
+%   position (defocused, asymmetric) and (b)~after slit translation to $r' = 11\,046$\,mm
+%   (in focus, $\Delta_z \approx 22\,\mu$m).  The residual coma asymmetry remains in
+%   both cases.}
 
 % =======================================================================
 \section{Plane Grating Monochromator (PGM)}
@@ -369,33 +429,33 @@ purely dispersive.  The focusing is delegated entirely to curved mirrors upstrea
 downstream of the grating.  The important consequence is a \textbf{fixed focal plane}:
 the image distance is independent of the grating rotation.
 
-The grating magnification factor is defined as:
+The \textbf{grating magnification} factor is $c^{-1}$, with $c$ defined using the Rowland circle condition:
 \begin{equation}
-  c = \frac{\cos\be}{\cos\al},
+  c = \frac{r'}{r} = \frac{R \cos\be}{R \cos\al} = \frac{\cos\be}{\cos\al},
   \label{eq:c_factor}
 \end{equation}
 and the grating equation becomes:
 \begin{equation}
-  1 - \frac{m\la}{d\sin\be} = \frac{1}{c^2}.
+  \left( \frac{m\la}{d} - \sin\be \right)^2 = 1 - \frac{1-\sin^2\be}{c^2}.
   \label{eq:PGM_grating}
 \end{equation}
 
 The parameter $c$ controls the angular compression/expansion between the collimated beam
-and the diffracted beam, and thus the \textbf{grating magnification} $c^{-1}$ can be
-tuned by rotating the plane mirror that delivers the collimated beam.
+and the diffracted beam, and thus the grating magnification $c^{-1}$ can be
+tuned by rotating the plane mirror.
 
-\placeholder{4cm}{Fig.~7}{%
-  Schematic of the plane grating geometry.  Show the plane mirror (angle $\theta_M$)
-  delivering the collimated beam at incidence angle $\alpha$ to the plane grating, and
-  the diffracted beam at angle $\beta$ being focused by the downstream cylindrical mirror.
-  Label the magnification factor $c = \cos\beta/\cos\alpha$.}
+% \placeholder{4cm}{Fig.~7}{%
+%   Schematic of the plane grating geometry.  Show the plane mirror (angle $\theta_M$)
+%   delivering the collimated beam at incidence angle $\alpha$ to the plane grating, and
+%   the diffracted beam at angle $\beta$ being focused by the downstream cylindrical mirror.
+%   Label the magnification factor $c = \cos\beta/\cos\alpha$.}
 
 \subsection{Collimated PGM: Vertical Deflection Layout}
 
 \begin{exbox}
 \textbf{File:} \texttt{03\_CollimatedPGM1000eVc2\_Vertical.ows}\\[4pt]
-\textbf{Layout} (distances from source): Toroidal mirror at 9\,m $\to$ plane mirror +
-plane grating at 28\,m $\to$ cylindrical mirror at 30\,m $\to$ exit slit at 31\,m.
+\textbf{Layout} (distances from source): Toroidal mirror at 28\,m $\to$ plane mirror +
+plane grating at 2\,m downstream from the Toroidal mirror. Cylindrical mirror at 1\,m downstream from the grating. Image plane 9\,m further downstream. 
 
 \medskip
 \textbf{Optical roles:}
@@ -409,39 +469,56 @@ plane grating at 28\,m $\to$ cylindrical mirror at 30\,m $\to$ exit slit at 31\,
 \end{itemize}
 
 \medskip
-\textbf{Parameters at 1000\,eV, $c = 2$:} $\al = 88.5°$, $\be = 87.1°$; plane mirror at
-$87.8°$ incidence.
+\textbf{Parameters at 1000\,eV, $c = 2$:} $\al = 88.5^\circ$, $\be = 87.1^\circ$; plane mirror at
+$87.8^\circ$ incidence.
 
 \medskip
 \textbf{Aberrations:}
 \begin{itemize}
   \item \textbf{Coma} is present in the vertical plane because the collimated beam does
         not enter the grating exactly at normal incidence (residual $F_{30}$).
-  \item Image size at slit: $\sim 5.8\,\mu$m without slope errors.
-  \item \textbf{Slope errors} on the toroidal mirror broaden the slit image significantly.
-        The simulation shows that slope errors on the upstream toroid are the dominant
-        resolution-limiting factor in this configuration.
+  \item Image size at slit: $\sim 5.8\,\mu$m (theoretical), $\sim 6.8\,\mu$m (ray-tracing, evidencing coma).
+  \item \textbf{Slope errors:} It is shown that the slope errors on the toroidal mirror broaden the image significantly at the image plane (passing from 6.8~$\mu$m to 18.4~$\mu$m).
+  Therefore, the slope errors on the upstream toroid are the dominant resolution-limiting factor in this configuration.
 \end{itemize}
 \end{exbox}
 
-\placeholder{5.5cm}{Fig.~8}{%
-  Vertical collimated PGM layout ($c = 2$, 1000\,eV).  Top: beamline schematic with
-  distances (toroid at 9\,m, plane mirror + grating at 28\,m, cylinder at 30\,m, slit
-  at 31\,m).  Bottom: ray-tracing spot at the exit slit showing coma aberration
-  ($\sim 5.8\,\mu$m ideal) and the broadened profile with slope errors on the toroid.}
+%\placeholder{5.5cm}{Fig.~8}{%
+  % Vertical collimated PGM layout ($c = 2$, 1000\,eV).  Top: beamline schematic with
+  % distances (toroid at 9\,m, plane mirror + grating at 28\,m, cylinder at 30\,m, slit
+  % at 31\,m).  Bottom: ray-tracing spot at the exit slit showing coma aberration
+  % ($\sim 5.8\,\mu$m ideal) and the broadened profile with slope errors on the toroid.}
 
-\placeholder{4cm}{Fig.~9}{%
+% \placeholder{4cm}{Fig.~9}{%
+%   Effect of slope errors on the toroidal mirror in the vertical PGM.
+%   Comparison of slit images: (a)~without slope errors (ideal, $\sim 5.8\,\mu$m) and
+%   (b)~with realistic r.m.s.\ slope errors, demonstrating the dominant contribution of
+%   the toroid to the resolution budget.}
+
+\begin{figure}[H]
+\label{fig:PGM}
+\caption{
   Effect of slope errors on the toroidal mirror in the vertical PGM.
-  Comparison of slit images: (a)~without slope errors (ideal, $\sim 5.8\,\mu$m) and
-  (b)~with realistic r.m.s.\ slope errors, demonstrating the dominant contribution of
-  the toroid to the resolution budget.}
+  The image on the slit plane with with realistic r.m.s. slope errors is  $\sim 18.4\,\mu$m (ideal, no slope errors: $\sim 5.8\,\mu$m).
+  This demonstrates the degradation of the resolution due to the slope errors that affect the collimation in the diffraction plane.}
+  \begin{center}
+  \includegraphics[width=0.99\textwidth]{figures/PGMslope.png}   
+  \end{center}
+\end{figure}
+
 
 \subsection{Follath Collimated PGM: Horizontal Deflection}
 
-The \textbf{Follath PGM} (R.\ Follath and F.\ Senf, NIM A\,390, 388, 1997) uses
-\textbf{horizontal} deflection by the plane mirror and grating.  The key advantage is
-that, in the horizontal plane, slope errors on the toroidal mirror are much less critical
-because the sagittal focusing is less sensitive to meridional slope errors.
+The \textbf{Follath PGM} (R.\ Follath and F.\ Senf, NIM A\,390, 388, 1997) uses the toroidal mirror, such as the 
+\textbf{horizontal} sagittal focusing is in the grating vertical (diffraction) plane. The key advantage is
+that, in the sagittal plane, slope errors on the toroidal mirror are much less critical
+because the sagittal focusing is less sensitive to meridional slope errors. This is expressed by the forgiveness factor\footnote{In the meridional plane, the slope errors $\sigma$ 
+increase the focal size by a factor $2q\sigma$. In the sagittal 
+direction, the same slope error increases the size by a factor 
+$2q\sigma\sin\theta$, where $\theta$ is the grazing angle of 
+incidence. Since $\theta \ll 1$ for X-ray mirrors, the sagittal 
+contribution is reduced by the \textit{forgiveness factor} 
+$\sin\theta \ll 1$.}
 
 \begin{exbox}
 \textbf{File:} \texttt{04\_CollimatedPGM1000eVc2.ows}\\[4pt]
@@ -463,21 +540,32 @@ because the sagittal focusing is less sensitive to meridional slope errors.
 
 \medskip
 \textbf{Effect of increasing $c$:} At $c = 5$ (file
-\texttt{05\_CollimatedPGM1000eVc5.ows}), $\al = 89.5°$, $\be = 87.4°$.  The
+\texttt{05\_CollimatedPGM1000eVc5.ows}), $\al = 89.5^\circ$, $\be = 87.4^\circ$.  The
 \textbf{astigmatic coma} grows, scaling as $\sim 5.8/(c/2) = 2.32\,\mu$m for ideal
 optics.  With slope errors, the image quality degrades further.
 \end{exbox}
 
-\placeholder{5.5cm}{Fig.~10}{%
-  Follath horizontal PGM ($c = 2$, 1000\,eV).  Left: beamline plan view showing
-  horizontal deflection by the plane mirror and grating.  Centre and right: SHADOW
-  footprints at the exit slit without and with toroid slope errors, demonstrating the
-  ``forgiveness factor'' --- the slope errors have negligible effect in this geometry.}
+\begin{figure}[H]
+\label{fig:Follath}
+\caption{ Left: Follath horizontal PGM ($c = 2$, 1000\,eV). Observe: no coma, practically no effect of slope error. Right:  Follath horizontal PGM ($c = 5$, 1000\,eV). Observe: Astigmatic coma (term $F_{12}$), small effect of slope error. }
+  \begin{center}
+  \includegraphics[width=0.49\textwidth]{figures/follathc2.png}
+  \includegraphics[width=0.49\textwidth]{figures/follathc5.png} 
+  \end{center}
+\end{figure}
 
-\placeholder{4cm}{Fig.~11}{%
-  Astigmatic coma growth with increasing magnification factor $c$ in the Follath PGM.
-  Slit images at $c = 2$ and $c = 5$ (file \texttt{05\_CollimatedPGM1000eVc5.ows}),
-  showing the $5.8/(c/2)$ scaling of the coma contribution.}
+
+
+% \placeholder{5.5cm}{Fig.~10}{%
+%   Follath horizontal PGM ($c = 2$, 1000\,eV).  Left: beamline plan view showing
+%   horizontal deflection by the plane mirror and grating.  Centre and right: SHADOW
+%   footprints at the exit slit without and with toroid slope errors, demonstrating the
+%   ``forgiveness factor'' --- the slope errors have negligible effect in this geometry.}
+
+% \placeholder{4cm}{Fig.~11}{%
+%   Astigmatic coma growth with increasing magnification factor $c$ in the Follath PGM.
+%   Slit images at $c = 2$ and $c = 5$ (file \texttt{05\_CollimatedPGM1000eVc5.ows}),
+%   showing the $5.8/(c/2)$ scaling of the coma contribution.}
 
 % =======================================================================
 \section{Focusing Variable Line Spacing PGM (FVLS-PGM)}
@@ -498,18 +586,22 @@ addresses the two main limitations of the collimated PGM:
 The solution is to use a \textbf{variable line spacing} (VLS) grating, where the groove
 density varies along the grating surface as:
 \begin{equation}
-  \sigma(w) = \sigma_0 + b_2\,w + b_3\,w^2 + \cdots,
+  k = \frac{1 + 2 b_2\,w + 3 b_3\,w^2 + \cdots}{d_0},
   \label{eq:VLS}
 \end{equation}
-with $\sigma_0 = 1/d_0$ the central line density.  The coefficients $b_2$ and $b_3$
+with $1/d_0$ the central line density.  The coefficients $b_2$ and $b_3$
 are chosen to:
 
 \begin{itemize}
-  \item $b_2$: solve the defocus equation $F_{20} = 0$ at all wavelengths simultaneously,
-        by illuminating the grating at the correct angle of incidence (note: in the FVLS
-        design, $c$ is \emph{not} a free parameter --- it is determined by $b_2$).
-  \item $b_3$: cancel coma $F_{30} = 0$ at one selected wavelength; coma is then
-        acceptably small over the full energy range.
+  \item Choose the grating magnification $c^{-1}=(\cos\be/\cos\al)^{-1}$.
+  \item Choose $\lambda_0$ for which $b_2$ will be zero. 
+  \item Solve the grating equation \ref{eq:grating} for $\be_0$.
+  \item $b_2$: Solve the defocus equation $F_{20} = 0$. 
+  % at all wavelengths simultaneously,
+  %       by illuminating the grating at the correct angle of incidence (note: in the FVLS
+  %       design, $c$ is \emph{not} a free parameter --- it is determined by $b_2$).
+  \item $b_3$: Cancel coma $F_{30} = 0$ at one selected wavelength.
+  % ; coma is then acceptably small over the full energy range.
 \end{itemize}
 
 \begin{keyresult}
@@ -522,19 +614,20 @@ Coma is zeroed at 600\,eV; solving coma at one wavelength is sufficient because 
 residual coma at other energies remains small.
 \end{keyresult}
 
-\placeholder{4cm}{Fig.~12}{%
-  VLS grating schematic showing the variable groove spacing $d(w) = 1/\sigma(w)$ as a
-  function of position $w$ along the grating surface.  Indicate the central density
-  $\sigma_0$ and the quadratic variation controlled by $b_2$ and $b_3$.}
+% \placeholder{4cm}{Fig.~12}{%
+%   VLS grating schematic showing the variable groove spacing $d(w) = 1/\sigma(w)$ as a
+%   function of position $w$ along the grating surface.  Indicate the central density
+%   $\sigma_0$ and the quadratic variation controlled by $b_2$ and $b_3$.}
 
 \subsection{Optical Layout}
 
 \begin{exbox}
-\textbf{File:} \texttt{06\_FVLSPGM.ows}\\[4pt]
-\textbf{Distances:} Source $\to$ heat absorber $\to$ plane mirror (28\,m) $\to$ VLS
-grating (28.3\,m) $\to$ slit plane (38.3\,m) $\to$ refocusing mirror $\to$ sample
-(48.3\,m).\\
-Parameters at 1000\,eV: $\al = 88.5°$, $\be = 87.1°$ (same $c = 2$ condition).
+\textbf{File:} \texttt{06\_FVLSPGM1000eVc2M2WithWithout.ows
+}\\[4pt]
+\textbf{Distances:} Source $\to$ heat absorber (placed artificially at 0~m) $\to$ plane mirror (29.7\,m) $\to$ VLS
+grating (+0.3\,m) $\to$ slit plane (+10\,m) .\\
+Grating designed for $c=2$ at 600~eV. \\
+Parameters at 1000\,eV: $\al = 88.53^\circ$, $\be = 87.05^\circ$ (same $c = 2$ condition).
 
 \medskip
 \textbf{Key feature:} There is no upstream collimating mirror.  The VLS grating itself
@@ -542,11 +635,11 @@ provides the meridional focusing at the exit slit, and the horizontal focus is p
 after the slit by a separate refocusing mirror.
 \end{exbox}
 
-\placeholder{4.5cm}{Fig.~13}{%
-  FVLS-PGM beamline layout.  Show the heat absorber, plane mirror (28\,m), VLS grating
-  (28.3\,m), exit slit (38.3\,m), and post-slit refocusing mirror.  Annotate the
-  distances and the absence of an upstream collimating mirror compared to the Follath
-  PGM.}
+% \placeholder{4.5cm}{Fig.~13}{%
+%   FVLS-PGM beamline layout.  Show the heat absorber, plane mirror (28\,m), VLS grating
+%   (28.3\,m), exit slit (38.3\,m), and post-slit refocusing mirror.  Annotate the
+%   distances and the absence of an upstream collimating mirror compared to the Follath
+%   PGM.}
 
 \subsection{Heat Load and Correction}
 
@@ -569,8 +662,8 @@ the slit --- resolving power degrades substantially.
 by adjusting the angle of incidence, a \emph{small angular correction} to $\al$ and $\be$
 is sufficient to restore the focus:
 \[
-  \al:\; 88.52843° \to 88.53789°,\quad
-  \be:\; 87.05389° \to 87.05860°.
+  \al:\; 88.52843^\circ \to 88.53789^\circ,\quad
+  \be:\; 87.05389^\circ \to 87.05860^\circ.
 \]
 This is equivalent to accounting for the shifted virtual source position in the VLS design
 equations.
@@ -581,20 +674,20 @@ nominal slit image --- the FVLS-PGM \textbf{self-corrects for heat-load deformat
 with only a minor adjustment of the mirror--grating angles.
 
 \medskip
-\textbf{Reference:} R.\ Reininger, NIM A\,649, 139 (2010).
+\textbf{Reference:} R.\ Reininger (2010).
 \end{exbox}
 
-\placeholder{5cm}{Fig.~14}{%
-  Heat load deformation of the plane mirror (35\,W absorbed power).
-  Left: surface height deviation (peak $\sim 0.40\,\mu$m) and slope error profile
-  (peak $\sim 15\,\mu$rad) vs.\ mirror length.  Right: induced virtual-source shift
-  to $\sim 28.52$\,m from the nominal 28\,m position.}
+% \placeholder{5cm}{Fig.~14}{%
+%   Heat load deformation of the plane mirror (35\,W absorbed power).
+%   Left: surface height deviation (peak $\sim 0.40\,\mu$m) and slope error profile
+%   (peak $\sim 15\,\mu$rad) vs.\ mirror length.  Right: induced virtual-source shift
+%   to $\sim 28.52$\,m from the nominal 28\,m position.}
 
-\placeholder{5.5cm}{Fig.~15}{%
-  FVLS-PGM ray-tracing at the exit slit under three conditions:
-  (a)~no heat load (reference); (b)~with heat load, uncorrected (defocused, RP degraded);
-  (c)~with heat load, corrected by angular adjustment
-  ($\Delta\alpha = +0.00946°$, $\Delta\beta = +0.00471°$) --- full RP recovery.}
+% \placeholder{5.5cm}{Fig.~15}{%
+%   FVLS-PGM ray-tracing at the exit slit under three conditions:
+%   (a)~no heat load (reference); (b)~with heat load, uncorrected (defocused, RP degraded);
+%   (c)~with heat load, corrected by angular adjustment
+%   ($\Delta\alpha = +0.00946°$, $\Delta\beta = +0.00471°$) --- full RP recovery.}
 
 \begin{notebox}
 \textbf{Limitation of the FVLS-PGM:} Because $c$ is fixed by the VLS coefficients
@@ -602,6 +695,18 @@ with only a minor adjustment of the mirror--grating angles.
 collimated PGM retains the freedom to vary $c$ (and hence the resolving power vs.\ flux
 trade-off), but at the cost of reduced heat-load tolerance.
 \end{notebox}
+
+\begin{figure}[H]
+\label{fig:VLS}
+\caption{
+  FVLS-PGM ray-tracing at the exit slit under three conditions:
+  (a)~no heat load (reference); (b)~with heat load, uncorrected (defocused, RP degraded);
+  (c)~with heat load, corrected by angular adjustment
+  ($\Delta\alpha = +0.00946°$, $\Delta\beta = +0.00471°$) --- full RP recovery.}
+  \begin{center}
+  \includegraphics[width=0.99\textwidth]{figures/VLS.png}   
+  \end{center}
+\end{figure}
 
 % =======================================================================
 \section{Comparison of Monochromator Types}
@@ -651,18 +756,17 @@ Focusing element
 \end{tabular}
 \end{center}
 
-\placeholder{5cm}{Fig.~16}{%
-  Side-by-side comparison of the four monochromator layouts drawn to the same scale,
-  highlighting the presence/absence of the upstream collimating mirror, direction of
-  deflection (vertical vs.\ horizontal), and the position of the exit slit relative to
-  the grating.}
+% \placeholder{5cm}{Fig.~16}{%
+%   Side-by-side comparison of the four monochromator layouts drawn to the same scale,
+%   highlighting the presence/absence of the upstream collimating mirror, direction of
+%   deflection (vertical vs.\ horizontal), and the position of the exit slit relative to
+%   the grating.}
 
 % =======================================================================
 \section{Summary and Conclusions}
 % =======================================================================
-
-The lecture by Reininger establishes a unified theoretical framework --- the optical path
-length expansion of Eq.~\eqref{eq:OPL} and Fermat's principle --- that underpins all
+A unified theoretical framework --- the optical path
+length expansion of Eq.~\eqref{eq:OPL} and Fermat's principle --- underpins all
 grating monochromator designs for soft X-rays.  The main conclusions are:
 
 \begin{enumerate}[leftmargin=*, label=\arabic*.]
@@ -671,7 +775,7 @@ grating monochromator designs for soft X-rays.  The main conclusions are:
 
   \item \textbf{The collimated PGM} decouples focusing from dispersion.  The
         \emph{vertical} layout is coma-affected and sensitive to toroidal mirror slope
-        errors.  The \emph{Follath horizontal} layout eliminates coma and is far more
+        errors.  The \emph{Follath} layout eliminates coma and is far more
         tolerant to slope errors (the ``forgiveness factor'').
 
   \item \textbf{The FVLS-PGM} is the most robust design: VLS coefficients simultaneously
@@ -685,11 +789,14 @@ grating monochromator designs for soft X-rays.  The main conclusions are:
         included in the OASYS widget library.
 \end{enumerate}
 
-\placeholder{4.5cm}{Fig.~17}{%
-  Summary figure: resolving power $\RP$ vs.\ photon energy for the four monochromator
-  types simulated in this work, plotted on a common axis to allow direct performance
-  comparison.  Each curve corresponds to the optimal operating condition of the
-  respective instrument.}
+
+
+
+% \placeholder{4.5cm}{Fig.~17}{%
+%   Summary figure: resolving power $\RP$ vs.\ photon energy for the four monochromator
+%   types simulated in this work, plotted on a common axis to allow direct performance
+%   comparison.  Each curve corresponds to the optimal operating condition of the
+%   respective instrument.}
 
 % =======================================================================
 \newpage
@@ -714,13 +821,14 @@ $d$                    & Groove spacing (at grating centre) \\
 $\la$                  & Wavelength \\
 $r$                    & Source-to-grating distance \\
 $r'$                   & Grating-to-image (exit slit) distance \\
-$R$                    & Grating radius of curvature (SGM) \\
-$c$                    & Magnification factor ($= \cos\be/\cos\al$) \\
-$\RP$                  & Resolving power ($= \la/\Delta\la$) \\
-$S_x, S_z$             & Source size (horizontal, vertical) RMS \\
-$S_x', S_z'$           & Source divergence (horizontal, vertical) RMS \\
+$R$                    & Grating radius of curvature (Meridional) \\
+$\rho$                    & Grating radius of curvature (Sagittal) \\
+$c$                    & Inverse of Magnification factor ($c= \cos\be/\cos\al$) \\
+$\RP$                  & Resolving power ($RP= \la/\Delta\la=-E/\Delta E$) \\
+$\Sigma_x, \Sigma_z$             & Source size (horizontal, vertical) RMS \\
+$\Sigma_x', \Sigma_z'$           & Source divergence (horizontal, vertical) RMS \\
 $b_2, b_3$             & VLS grating coefficients (line density gradient, curvature) \\
-$\sigma_0$             & Central groove density of VLS grating \\
+$1/d_0$             & Central groove density of VLS grating \\
 \bottomrule
 \end{tabular}
 
@@ -743,38 +851,11 @@ $\sigma_0$             & Central groove density of VLS grating \\
         \href{https://doi.org/10.1016/j.nima.2004.09.007}{doi:10.1016/j.nima.2004.09.007}
 
   \item R.\ Reininger,
-        \textit{Correction of heat-load-induced deformations in soft X-ray plane grating
-        monochromators},
-        Nucl.\ Instrum.\ Methods Phys.\ Res.\ A \textbf{649}, 139 (2010).
+        \textit{Correcting Heat Load Induced Deformations on a XUV Beamline},
+        Proc. of ACTOP2008, Second Workshop on X-ray and XUV Optics, Trieste (Italy) (2008).
+
+\href{https://www.elettra.eu/actop08/uploads/Main/a29.pdf}{link here}
+        % https://www.elettra.eu/actop08/uploads/Main/a29.pdf
 \end{enumerate}
-
-% =======================================================================
-\newpage
-\section*{How to Replace Placeholders with Real Figures}
-\addcontentsline{toc}{section}{How to Replace Placeholders}
-% =======================================================================
-
-Each placeholder in this document is produced by the command:
-
-\begin{verbatim}
-\placeholder[width]{height}{Fig. N}{Description of intended content}
-\end{verbatim}
-
-To replace a placeholder with a real figure, comment out the \verb|\placeholder| line
-and insert a standard \LaTeX\ figure block in its place:
-
-\begin{verbatim}
-% \placeholder{5cm}{Fig.~5}{...description...}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.85\linewidth]{fig05_SGM_1000eV_raytracing.pdf}
-  \caption{SHADOW ray-tracing results for SGM at 1000\,eV. ...}
-  \label{fig:SGM_1000eV}
-\end{figure}
-\end{verbatim}
-
-Recommended image formats (in order of preference): \texttt{.pdf}, \texttt{.eps},
-\texttt{.png}.  Place all figure files in the same directory as the \texttt{.tex} source,
-or adjust the path in \verb|\includegraphics| accordingly.
 
 \end{document}
